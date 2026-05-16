@@ -5,6 +5,16 @@ description: Use when you have a written implementation plan to execute in a sep
 
 # Executing Plans
 
+## Autonomous Mode
+
+If your invocation context contains `<AUTONOMOUS_MODE>`, you are running as a subagent for an autonomous orchestrator. Override the human-facing flow as follows:
+
+- **Do not "raise concerns with your human partner"** (Step 1.3). If you have concerns about the plan, attempt to resolve them from `ORIGINAL_INTENT` + the plan + the codebase. If you still cannot, return `STATUS: BLOCKED` with the concerns as `SUMMARY`.
+- **Do not "ask for clarification rather than guessing"** when you hit a blocker. Return `STATUS: BLOCKED` instead so the orchestrator can recover or escalate.
+- **The orchestrator normally uses `subagent-driven-development`, not this skill.** If you were dispatched to run this skill in autonomous mode, you almost certainly should not be — return `STATUS: BLOCKED` and let the orchestrator switch paths.
+
+Everything below this section describes the default behavior. In autonomous mode, follow the overrides above.
+
 ## Overview
 
 Load plan, review critically, execute all tasks, report when complete.

@@ -5,6 +5,16 @@ description: Use when implementing any feature or bugfix, before writing impleme
 
 # Test-Driven Development (TDD)
 
+## Autonomous Mode
+
+If your invocation context contains `<AUTONOMOUS_MODE>`, you are running as a subagent for an autonomous orchestrator. Override the human-facing flow as follows:
+
+- **"Exceptions (ask your human partner)"** — apply the documented exception criteria yourself (throwaway prototypes, generated code, configuration files). Log the decision in your `SUMMARY` trailer. Do not call `AskUserQuestion`.
+- **"When Stuck → Ask your human partner"** (don't-know-how-to-test row) — try the other rows first (wished-for API, write assertion first, dependency injection). If still stuck, return `STATUS: BLOCKED` with the specific test you couldn't write.
+- **"No exceptions without your human partner's permission"** — in autonomous mode, the orchestrator's `ORIGINAL_INTENT` is the standing permission. Apply the documented exception criteria. Log every exception in `SUMMARY`.
+
+Everything below this section describes the default behavior. In autonomous mode, follow the overrides above.
+
 ## Overview
 
 Write the test first. Watch it fail. Write minimal code to pass.

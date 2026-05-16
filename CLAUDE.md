@@ -1,5 +1,11 @@
 # Superpowers — Contributor Guidelines
 
+## Fork Note: Autonomous Orchestrator Mode
+
+**This repo is a fork (`superpowers-auto`) and is NOT intended for upstream contribution.** It runs in autonomous orchestrator mode by default: the brainstorm → plan → implement → review → PR loop runs end-to-end in one session without prompting the human between phases. See `skills/orchestrating-development/SKILL.md` for the architecture.
+
+The contributor guidelines below describe the upstream `superpowers` project's PR review standards. **They do not apply to changes pushed within this fork** — there is no upstream PR pipeline for this repo. Keep this fork's changes scoped to the owner's workflow.
+
 ## If You Are an AI Agent
 
 Stop. Read this section before doing anything.
