@@ -1,5 +1,7 @@
 # Visual Companion Guide
 
+**Disabled in autonomous mode.** If your invocation prompt begins with the literal sentinel `[ORCHESTRATOR-AUTONOMOUS-DISPATCH]` (the marker the orchestrator prepends to dispatched subagent prompts), do not offer or use the Visual Companion — there is no live human viewing a browser. Skip this skill entirely.
+
 Browser-based visual brainstorming companion for showing mockups, diagrams, and options.
 
 ## When to Use

@@ -5,6 +5,18 @@ description: Use when implementation is complete, all tests pass, and you need t
 
 # Finishing a Development Branch
 
+## Autonomous Mode
+
+If your invocation prompt begins with the literal sentinel `[ORCHESTRATOR-AUTONOMOUS-DISPATCH]` (the marker the orchestrator prepends to dispatched subagent prompts; see `skills/orchestrating-development/autonomous-mode-preamble.md`), you are running as a subagent for an autonomous orchestrator. Override the human-facing flow as follows:
+
+- **Skip Step 4 (Present Options) and Step 5 entirely.** Do NOT print the 4-option (or 3-option) menu. Do NOT call `AskUserQuestion`.
+- **The only autonomous action is push + create PR.** Run Step 1 (Verify Tests). If tests fail → return `STATUS: BLOCKED` with the failures in `SUMMARY` (the orchestrator will route fixes back through the implementation loop). If tests pass → run Step 2/3 (detect environment, determine base branch), then go directly to "Option 2: Push and Create PR" in Step 5. Do not run Option 1 (local merge), do not run Option 3 (keep as-is), and absolutely do not run Option 4 (discard).
+- **Option 4 (Discard) is forbidden in autonomous mode.** Even if the orchestrator's reasoning would normally point there, never delete branches, force-delete, or `git reset --hard` the feature branch. If the situation seems to call for it, return `STATUS: BLOCKED` with the diagnosis — the orchestrator escalates to the human.
+- **Do NOT cleanup the worktree.** PR iteration may still need it (this matches Option 2's existing behavior).
+- **Return trailer:** on successful PR creation, end with `STATUS: DONE`, `ARTIFACT: <PR URL>`, and a `SUMMARY` of the PR title/body and any decisions made.
+
+Everything below this section describes the default human-in-the-loop behavior. In autonomous mode, follow the overrides above.
+
 ## Overview
 
 Guide completion of development work by presenting clear options and handling chosen workflow.

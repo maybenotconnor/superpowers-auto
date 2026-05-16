@@ -13,6 +13,19 @@ Start by understanding the current project context, then ask questions one at a 
 Do NOT invoke any implementation skill, write any code, scaffold any project, or take any implementation action until you have presented a design and the user has approved it. This applies to EVERY project regardless of perceived simplicity.
 </HARD-GATE>
 
+## Autonomous Mode
+
+If your invocation prompt begins with the literal sentinel `[ORCHESTRATOR-AUTONOMOUS-DISPATCH]` (the marker the orchestrator prepends to dispatched subagent prompts; see `skills/orchestrating-development/autonomous-mode-preamble.md`), you are running as a subagent for an autonomous orchestrator. Override the rules in this skill as follows:
+
+- **Do NOT call `AskUserQuestion`** and do not wait for human input. No "ask clarifying questions one at a time" — batch any open questions internally and answer them from `ORIGINAL_INTENT` + the project context you explored.
+- **Do NOT present design sections and wait for approval.** Write the design, run the self-review, commit the spec, and return `STATUS: DONE` with the spec path.
+- **Skip the user-review gate (Checklist item 8).** The orchestrator (or a downstream phase) will read the spec.
+- **Do NOT offer the Visual Companion** (Checklist item 2) — there is no live viewer. Proceed straight to the next checklist item.
+- **The `<HARD-GATE>` above does not apply in autonomous mode**, because you are not invoking any implementation skill from inside this subagent — you only produce the spec and return. The orchestrator dispatches implementation phases separately.
+- If you encounter a genuine ambiguity you cannot resolve from `ORIGINAL_INTENT` or the project state, return `STATUS: QUESTION` with 2–4 candidate options for the orchestrator to pick.
+
+Everything below this section describes the default (human-in-the-loop) behavior. In autonomous mode, follow the autonomous overrides above.
+
 ## Anti-Pattern: "This Is Too Simple To Need A Design"
 
 Every project goes through this process. A todo list, a single-function utility, a config change — all of them. "Simple" projects are where unexamined assumptions cause the most wasted work. The design can be short (a few sentences for truly simple projects), but you MUST present it and get approval.

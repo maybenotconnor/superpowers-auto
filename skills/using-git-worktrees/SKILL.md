@@ -5,6 +5,19 @@ description: Use when starting feature work that needs isolation from current wo
 
 # Using Git Worktrees
 
+## Autonomous Mode
+
+If your invocation prompt begins with the literal sentinel `[ORCHESTRATOR-AUTONOMOUS-DISPATCH]` (the marker the orchestrator prepends to dispatched subagent prompts; see `skills/orchestrating-development/autonomous-mode-preamble.md`), you are running as a subagent for an autonomous orchestrator. Override the human-facing flow as follows:
+
+- **Skip the worktree-consent prompt in Step 0.** Do NOT call `AskUserQuestion` or ask "Would you like me to set up an isolated worktree?". In autonomous mode, **always create a worktree** when one does not already exist (i.e., when `GIT_DIR == GIT_COMMON` or you're in a submodule). The orchestrator runs every dev request in isolation by default.
+- **If the user has already declared a worktree preference** in `ORIGINAL_INTENT` (e.g., "work in place, don't use a worktree"), honor it as today.
+- **Step 0's "already in linked worktree" branch is unchanged.** Just skip creation and proceed.
+- **If `git worktree add` fails** (sandbox/permission error), fall back to working in place exactly as the existing Sandbox-Fallback note describes. Do not escalate.
+- **Step 4 baseline tests:** if baseline tests fail in autonomous mode, do NOT "ask whether to proceed or investigate". Return `STATUS: BLOCKED` with the failures — the orchestrator decides whether to proceed.
+- **Return trailer:** on success, end with `STATUS: DONE`, `ARTIFACT: <worktree path + branch name>`, and a `SUMMARY` of what was created.
+
+Everything below this section describes the default behavior. In autonomous mode, follow the overrides above.
+
 ## Overview
 
 Ensure work happens in an isolated workspace. Prefer your platform's native worktree tools. Fall back to manual git worktrees only when no native tool is available.

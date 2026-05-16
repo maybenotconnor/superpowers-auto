@@ -5,6 +5,15 @@ description: Use when executing implementation plans with independent tasks in t
 
 # Subagent-Driven Development
 
+## Autonomous Mode
+
+This skill describes a loop that **dispatches per-task subagents**. In autonomous mode, the orchestrator (the main session running `orchestrating-development`) runs this loop directly — because subagents cannot spawn further subagents (Claude Code: "No nested teams").
+
+- **If your invocation prompt begins with the literal sentinel `[ORCHESTRATOR-AUTONOMOUS-DISPATCH]`** (the marker the orchestrator prepends to dispatched subagent prompts; see `skills/orchestrating-development/autonomous-mode-preamble.md`), you are a subagent yourself and you cannot dispatch more subagents. Return `STATUS: BLOCKED` immediately. Tell the orchestrator to run the per-task loop itself.
+- **If you are the orchestrator** (the main session — your prompt does NOT begin with the sentinel because it began with the user's natural-language request), use this skill as the procedural reference for the per-task loop. You dispatch each implementer/spec-reviewer/code-quality-reviewer subagent yourself, with the autonomous-mode preamble prepended to each. The "human partner" references below become orchestrator decisions: answer from `ORIGINAL_INTENT` + plan first; escalate via `AskUserQuestion` only per the criteria in `skills/orchestrating-development/escalation-criteria.md`.
+
+Everything below this section describes the loop. In autonomous mode, the orchestrator follows it directly.
+
 Execute plan by dispatching fresh subagent per task, with two-stage review after each: spec compliance review first, then code quality review.
 
 **Why subagents:** You delegate tasks to specialized agents with isolated context. By precisely crafting their instructions and context, you ensure they stay focused and succeed at their task. They should never inherit your session's context or history — you construct exactly what they need. This also preserves your own context for coordination work.

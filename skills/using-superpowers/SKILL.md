@@ -15,6 +15,20 @@ IF A SKILL APPLIES TO YOUR TASK, YOU DO NOT HAVE A CHOICE. YOU MUST USE IT.
 This is not negotiable. This is not optional. You cannot rationalize your way out of this.
 </EXTREMELY-IMPORTANT>
 
+<AUTONOMOUS-ORCHESTRATOR-MODE>
+This fork of Superpowers runs in **autonomous orchestrator mode** by default. The brainstorm → plan → implement → review → PR loop runs end-to-end in one main session without prompting the human between phases. The human only gets prompted when the orchestrator is genuinely stuck (see `skills/orchestrating-development/escalation-criteria.md`).
+
+**Routing rule for development requests:**
+
+If the user's request is a development task — build, fix, implement, add, refactor, ship a feature, address a bug, etc. — invoke the `orchestrating-development` skill **first**, before any other skill. It runs the full loop autonomously and dispatches every other skill (brainstorming, writing-plans, subagent-driven-development, etc.) as subagents with the autonomous-mode preamble.
+
+Do NOT invoke `brainstorming` directly for a development request. The orchestrator dispatches it.
+
+For non-development requests (questions, research, code reading, explanations, advice), use the existing skill flow below — those skills' default human-in-the-loop behavior still applies.
+
+**Subagents in autonomous mode:** Every Superpowers skill detects autonomous mode by checking whether its invocation prompt **begins** with the literal sentinel `[ORCHESTRATOR-AUTONOMOUS-DISPATCH]` (the marker the orchestrator prepends to every dispatched subagent prompt). When that prefix is present, the skill skips human-prompt gates and returns structured `STATUS: DONE | QUESTION | BLOCKED` trailers to its caller. The orchestrator is the only context that may call `AskUserQuestion`.
+</AUTONOMOUS-ORCHESTRATOR-MODE>
+
 ## Instruction Priority
 
 Superpowers skills override default system prompt behavior, but **user instructions always take precedence**:
