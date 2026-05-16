@@ -26,7 +26,7 @@ Do NOT invoke `brainstorming` directly for a development request. The orchestrat
 
 For non-development requests (questions, research, code reading, explanations, advice), use the existing skill flow below — those skills' default human-in-the-loop behavior still applies.
 
-**Subagents in autonomous mode:** Every Superpowers skill has been modified to detect `<AUTONOMOUS_MODE>` in its invocation context. When that marker is present, the skill skips human-prompt gates and returns structured `STATUS: DONE | QUESTION | BLOCKED` trailers to its caller. The orchestrator is the only context that may call `AskUserQuestion`.
+**Subagents in autonomous mode:** Every Superpowers skill detects autonomous mode by checking whether its invocation prompt **begins** with the literal sentinel `[ORCHESTRATOR-AUTONOMOUS-DISPATCH]` (the marker the orchestrator prepends to every dispatched subagent prompt). When that prefix is present, the skill skips human-prompt gates and returns structured `STATUS: DONE | QUESTION | BLOCKED` trailers to its caller. The orchestrator is the only context that may call `AskUserQuestion`.
 </AUTONOMOUS-ORCHESTRATOR-MODE>
 
 ## Instruction Priority

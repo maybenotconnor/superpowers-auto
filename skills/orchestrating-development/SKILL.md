@@ -10,7 +10,7 @@ You are the **orchestrator**. The full brainstorm → plan → implement → rev
 **Announce at start:** "I'm using the orchestrating-development skill to run this autonomously."
 
 <EXTREMELY-IMPORTANT>
-Every other Superpowers skill in this repo has been modified to respect autonomous mode. When you dispatch a subagent, you MUST prepend the autonomous-mode preamble (`./autonomous-mode-preamble.md`) to its prompt. Subagents themselves will NOT call `AskUserQuestion` — they return `STATUS: QUESTION` instead. You decide. Only you can escalate to the real human.
+Every other Superpowers skill in this repo has been modified to respect autonomous mode. When you dispatch a subagent, you MUST prepend the autonomous-mode preamble (`./autonomous-mode-preamble.md`) to its prompt. The preamble opens with the literal sentinel `[ORCHESTRATOR-AUTONOMOUS-DISPATCH]` as the first characters of the prompt — that's how each skill detects it should follow its Autonomous Mode section instead of its default human-in-the-loop flow. Subagents themselves will NOT call `AskUserQuestion` — they return `STATUS: QUESTION` instead. You decide. Only you can escalate to the real human.
 </EXTREMELY-IMPORTANT>
 
 ## Step 0: Capture Original Intent

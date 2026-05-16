@@ -7,7 +7,7 @@ description: Use when implementing any feature or bugfix, before writing impleme
 
 ## Autonomous Mode
 
-If your invocation context contains `<AUTONOMOUS_MODE>`, you are running as a subagent for an autonomous orchestrator. Override the human-facing flow as follows:
+If your invocation prompt begins with the literal sentinel `[ORCHESTRATOR-AUTONOMOUS-DISPATCH]` (the marker the orchestrator prepends to dispatched subagent prompts; see `skills/orchestrating-development/autonomous-mode-preamble.md`), you are running as a subagent for an autonomous orchestrator. Override the human-facing flow as follows:
 
 - **"Exceptions (ask your human partner)"** — apply the documented exception criteria yourself (throwaway prototypes, generated code, configuration files). Log the decision in your `SUMMARY` trailer. Do not call `AskUserQuestion`.
 - **"When Stuck → Ask your human partner"** (don't-know-how-to-test row) — try the other rows first (wished-for API, write assertion first, dependency injection). If still stuck, return `STATUS: BLOCKED` with the specific test you couldn't write.

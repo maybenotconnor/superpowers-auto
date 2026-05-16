@@ -7,7 +7,7 @@ description: Use when you have a spec or requirements for a multi-step task, bef
 
 ## Autonomous Mode
 
-If your invocation context contains `<AUTONOMOUS_MODE>`, you are running as a subagent for an autonomous orchestrator. Override the human-facing flow as follows:
+If your invocation prompt begins with the literal sentinel `[ORCHESTRATOR-AUTONOMOUS-DISPATCH]` (the marker the orchestrator prepends to dispatched subagent prompts; see `skills/orchestrating-development/autonomous-mode-preamble.md`), you are running as a subagent for an autonomous orchestrator. Override the human-facing flow as follows:
 
 - **Skip the "Execution Handoff" choice prompt** at the end. The orchestrator always runs the subagent-driven path itself. Just write the plan, run the self-review, save the file, and return `STATUS: DONE` with the plan path. Do not ask "which approach?"
 - **Do not call `AskUserQuestion`** for anything. If you genuinely cannot proceed because the spec is internally inconsistent or missing information needed to plan tasks, return `STATUS: QUESTION` with 2–4 concrete options.

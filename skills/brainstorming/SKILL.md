@@ -15,7 +15,7 @@ Do NOT invoke any implementation skill, write any code, scaffold any project, or
 
 ## Autonomous Mode
 
-If your invocation context contains `<AUTONOMOUS_MODE>`, you are running as a subagent for an autonomous orchestrator. Override the rules in this skill as follows:
+If your invocation prompt begins with the literal sentinel `[ORCHESTRATOR-AUTONOMOUS-DISPATCH]` (the marker the orchestrator prepends to dispatched subagent prompts; see `skills/orchestrating-development/autonomous-mode-preamble.md`), you are running as a subagent for an autonomous orchestrator. Override the rules in this skill as follows:
 
 - **Do NOT call `AskUserQuestion`** and do not wait for human input. No "ask clarifying questions one at a time" — batch any open questions internally and answer them from `ORIGINAL_INTENT` + the project context you explored.
 - **Do NOT present design sections and wait for approval.** Write the design, run the self-review, commit the spec, and return `STATUS: DONE` with the spec path.

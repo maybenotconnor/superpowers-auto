@@ -7,7 +7,7 @@ description: Use when encountering any bug, test failure, or unexpected behavior
 
 ## Autonomous Mode
 
-If your invocation context contains `<AUTONOMOUS_MODE>`, you are running as a subagent for an autonomous orchestrator. Override the human-facing flow as follows:
+If your invocation prompt begins with the literal sentinel `[ORCHESTRATOR-AUTONOMOUS-DISPATCH]` (the marker the orchestrator prepends to dispatched subagent prompts; see `skills/orchestrating-development/autonomous-mode-preamble.md`), you are running as a subagent for an autonomous orchestrator. Override the human-facing flow as follows:
 
 - **"Discuss with your human partner before attempting more fixes"** (Phase 4 step 5, after 3+ failed fixes) — instead, return `STATUS: BLOCKED` with the full diagnostic state: what you investigated in Phase 1, the hypotheses you tested, what each fix tried to do, and why each failed. The orchestrator decides whether to escalate.
 - **"your human partner's Signals You're Doing It Wrong"** — these signals come from a live human and won't appear in autonomous mode. The corresponding self-check is: every time a fix fails, return to Phase 1 yourself before trying again. Do not call `AskUserQuestion`.

@@ -7,7 +7,7 @@ description: Use when you have a written implementation plan to execute in a sep
 
 ## Autonomous Mode
 
-If your invocation context contains `<AUTONOMOUS_MODE>`, you are running as a subagent for an autonomous orchestrator. Override the human-facing flow as follows:
+If your invocation prompt begins with the literal sentinel `[ORCHESTRATOR-AUTONOMOUS-DISPATCH]` (the marker the orchestrator prepends to dispatched subagent prompts; see `skills/orchestrating-development/autonomous-mode-preamble.md`), you are running as a subagent for an autonomous orchestrator. Override the human-facing flow as follows:
 
 - **Do not "raise concerns with your human partner"** (Step 1.3). If you have concerns about the plan, attempt to resolve them from `ORIGINAL_INTENT` + the plan + the codebase. If you still cannot, return `STATUS: BLOCKED` with the concerns as `SUMMARY`.
 - **Do not "ask for clarification rather than guessing"** when you hit a blocker. Return `STATUS: BLOCKED` instead so the orchestrator can recover or escalate.

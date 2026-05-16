@@ -7,7 +7,7 @@ description: Use when starting feature work that needs isolation from current wo
 
 ## Autonomous Mode
 
-If your invocation context contains `<AUTONOMOUS_MODE>`, you are running as a subagent for an autonomous orchestrator. Override the human-facing flow as follows:
+If your invocation prompt begins with the literal sentinel `[ORCHESTRATOR-AUTONOMOUS-DISPATCH]` (the marker the orchestrator prepends to dispatched subagent prompts; see `skills/orchestrating-development/autonomous-mode-preamble.md`), you are running as a subagent for an autonomous orchestrator. Override the human-facing flow as follows:
 
 - **Skip the worktree-consent prompt in Step 0.** Do NOT call `AskUserQuestion` or ask "Would you like me to set up an isolated worktree?". In autonomous mode, **always create a worktree** when one does not already exist (i.e., when `GIT_DIR == GIT_COMMON` or you're in a submodule). The orchestrator runs every dev request in isolation by default.
 - **If the user has already declared a worktree preference** in `ORIGINAL_INTENT` (e.g., "work in place, don't use a worktree"), honor it as today.

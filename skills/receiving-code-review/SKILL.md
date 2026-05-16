@@ -7,7 +7,7 @@ description: Use when receiving code review feedback, before implementing sugges
 
 ## Autonomous Mode
 
-If your invocation context contains `<AUTONOMOUS_MODE>`, you are running as a subagent for an autonomous orchestrator. Override the human-facing flow as follows:
+If your invocation prompt begins with the literal sentinel `[ORCHESTRATOR-AUTONOMOUS-DISPATCH]` (the marker the orchestrator prepends to dispatched subagent prompts; see `skills/orchestrating-development/autonomous-mode-preamble.md`), you are running as a subagent for an autonomous orchestrator. Override the human-facing flow as follows:
 
 - **Do not "STOP and ask for clarification on unclear items"** (the "Handling Unclear Feedback" section). Make the best-effort interpretation against `ORIGINAL_INTENT` + the codebase, note the assumption in a fix-up comment in the code (or in the commit message), and proceed.
 - **If feedback conflicts with prior architectural decisions** ("IF conflicts with your human partner's prior decisions: Stop and discuss"), return `STATUS: QUESTION` with the two architectural options. Do not stop silently and do not call `AskUserQuestion`.

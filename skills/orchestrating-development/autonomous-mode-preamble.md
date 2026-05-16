@@ -1,11 +1,13 @@
 # Autonomous Mode Preamble
 
-The orchestrator prepends this verbatim block (with placeholders filled in) to every subagent's prompt. Subagents and the skills they run check for the `<AUTONOMOUS_MODE>` marker to know they must follow these rules instead of the original human-in-the-loop behavior.
+The orchestrator prepends this verbatim block (with placeholders filled in) to every subagent's prompt. The block opens with the literal sentinel `[ORCHESTRATOR-AUTONOMOUS-DISPATCH]` as the very first characters of the prompt — that's the cue every Superpowers skill uses to know it must follow its Autonomous Mode section instead of the default human-in-the-loop flow.
+
+The sentinel only appears at the START of a dispatched subagent's prompt. Skill files may reference the sentinel string in documentation (inside backticks, like this), but a skill only switches into autonomous mode when its actual invocation prompt **opens** with the sentinel.
 
 ---
 
 ```
-<AUTONOMOUS_MODE>
+[ORCHESTRATOR-AUTONOMOUS-DISPATCH]
 You are running as a single-shot subagent for an autonomous orchestrator. The human is not in your loop.
 
 Rules:
@@ -48,12 +50,17 @@ PRIOR_ARTIFACTS:
 
 TASK:
 <the specific skill to run and what to produce>
-</AUTONOMOUS_MODE>
+[/ORCHESTRATOR-AUTONOMOUS-DISPATCH]
 ```
 
 ## How skills detect autonomous mode
 
-Every modified Superpowers skill checks for the literal string `<AUTONOMOUS_MODE>` in its invocation context. If present, the skill follows its "Autonomous Mode" section instead of its default human-in-the-loop behavior. The orchestrator never sees this preamble in its OWN context (it builds and dispatches it); only the dispatched subagent does.
+Every modified Superpowers skill checks: **"Does my invocation prompt begin with `[ORCHESTRATOR-AUTONOMOUS-DISPATCH]`?"** If yes, follow the skill's Autonomous Mode section. If no (the orchestrator session or a normal human-in-the-loop session), follow the default flow.
+
+This "begins with" check is robust because:
+- A dispatched subagent's prompt is exactly the orchestrator's constructed prompt — it starts with the sentinel.
+- The orchestrator's own prompt is the user's natural-language request — it does not start with the sentinel.
+- Skill files may reference the sentinel string in documentation (inside backticks), but that reference appears mid-context after the user's prompt, not at the start.
 
 ## What the orchestrator does NOT include
 
